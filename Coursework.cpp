@@ -12,9 +12,6 @@
 #include <map>
 #define Debug
 using namespace std;
-
-
-
 int GetPosition() {
 	while (true)
 	{
@@ -60,8 +57,10 @@ int main()
 {
 	setlocale(LC_ALL, "ukrainian");
 	list<CardofPatien*> listofpatien;
+	list<Doctor*> listofdoctor;
 	unsigned int position;
 	Doctor D;
+	string date;
 	/*do
 	{
 		cout << "Введите номер нужной операции." << "\n\n";
@@ -79,54 +78,43 @@ int main()
 
 	} while (position != 0);
 	*/
-	//AddPatien(listofpatien);
-	//GetPatienfromFile(listofpatien);
-	//ShowList(listofpatien);
-	//AddPatientoFile(listofpatien);
+	AddPatien(listofpatien);
+	
+	for (int i = 0; i < 3; i++)
+	{
+		cin >> date;
+		D.AddDay(date);
+	}
 	D.SetnullTime();
+	cin >> date;
+	
+	D.Addperson(date,5,listofpatien.back());
 	D.TempShow();
 	return 0;
 }
 void AddPatien(list<CardofPatien*> &ListofPatien) {
-	string Name, Surname, Otchestvo, BDay, HomeCountry, HomeCity, Address, DateOfIssuance, Email, Pasword;
-	int IPN, WhoGive, SerialNumber, MobileNumber;
-	char Sex;
+	string Name, Surname, Otchestvo, BDay,Email;
+	int SerialNumber, MobileNumber;
+	
 #ifdef Debug
 	Name="Alan";  
 	// cout << "Введiть ваше прiзвище: "; cin >> Surname;  cout << endl;
 	Surname = "Abrakadabrovich";
 	Otchestvo="Evgenevich"; 
-	Sex='m';  
 	BDay="13.09.2001";  
-	HomeCountry="ukr";
-	HomeCity="HH";  
-	Address="ff";
-    IPN=1; 
-	WhoGive=2;  
-	DateOfIssuance="gsgx";  
-	SerialNumber=11;  
 	MobileNumber=5454;  
 	Email="gg";
-	Pasword="gg"; 
+	
 #else
 	cout << "Введiть ваше iм'я: "; cin >> Name;  cout << endl;
 	cout << "Введiть ваше прiзвище: "; cin >> Surname;  cout << endl;
 	cout << "Введiть ваше iм'я по батьковi: "; cin >> Otchestvo;  cout << endl;
-	cout << "Введiть вашу стать: "; cin >> Sex;  cout << endl;
 	cout << "Введiть дату вашого народження: "; cin >> BDay;  cout << endl;
-	cout << "Введiть країну вашого народження: "; cin >> HomeCountry;  cout << endl;
-	cout << "Введiть мiсто вашого народження: "; cin >> HomeCity;  cout << endl;
-	cout << "Введiть вашу домашню адресу: "; cin >> Address;  cout << endl;
-	cout << "Введiть ваш номер платника податкiв: "; cin >> IPN; cout << endl;
-	cout << "Введiть ким видан ваш паспорт: "; cin >> WhoGive;  cout << endl;
-	cout << "Введiть дату:  "; cin >> DateOfIssuance;  cout << endl;
-	cout << "Введiть серiйний номер паспорту: "; cin >> SerialNumber;  cout << endl;
 	cout << "Введiть ваш мобiльний номер: (+38)"; cin >> MobileNumber;  cout << endl;
 	cout << "Введiть вашу електронну пошту: "; cin >> Email;  cout << endl;
 	cout << "Придумайте пароль: "; cin >> Pasword;  cout << endl;
 #endif 
-    CardofPatien* node = new CardofPatien(Name, Surname, Otchestvo, BDay, HomeCountry, HomeCity, Address, IPN, Sex,
-		WhoGive, DateOfIssuance, SerialNumber, MobileNumber, Email);
+    CardofPatien* node = new CardofPatien(Name, Surname, Otchestvo, BDay,MobileNumber, Email);
 	ListofPatien.push_back(node);
 }
 void ShowList(list<CardofPatien*>& ListofPatien) {
