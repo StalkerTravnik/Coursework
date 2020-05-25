@@ -3,18 +3,22 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <map>
 #include "CardofPatien.h"
 
 
 using namespace std;
 
+struct priem
+{
+	int timeid;
+	CardofPatien* person;
+
+};
 class Data
 {
 public:
 	string date;
-	vector<map<unsigned, CardofPatien*>> time;
-
+	vector<priem> time;
 };
 class Doctor
 {
@@ -27,27 +31,30 @@ private:
 	list<Data*> scadual;
 public:
 	void SetnullTime() {
-		unsigned k = 0;
+		int k = 0;
 		for (auto iter = scadual.begin(); iter != scadual.end(); iter++)
 		{
 
 			for (int i = 0; i < (*iter)->time.size(); i++)
 			{
-				(*iter)->time[i].begin = k;
-				(*iter)->time[i].end = nullptr;
+				(*iter)->time[i].timeid = k;
+				(*iter)->time[i].person = nullptr;
 			}
 		}
 	}
 	void TempShow() {
 		for (auto iter = scadual.begin(); iter != scadual.end(); iter++)
 		{
-			for (int i = 0; i < (*iter)->time.size; i++)
+			for (int i = 0; i < (*iter)->time.size(); i++)
 			{
-				cout << (*iter)->time[i].begin()<<" ";
+				cout << (*iter)->time[i].timeid <<" ";
 			}
 			cout << endl;
 		}
 	}
-
+	void AddDay() {
+		Data* data = new Data();
+		scadual.push_back(data);
+	}
 };
 
