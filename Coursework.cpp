@@ -10,7 +10,7 @@
 #include "CardofPatien.h"
 #include "Doctor.h"
 #include "Schedule.h"
-#define Debug
+//#define Debug
 using namespace std;
 int GetPosition() {
 	while (true)
@@ -59,11 +59,166 @@ int main()
 	list<CardofPatien*> listofpatien;
 	list<Doctor*> listofdoctor;
 	list<Schedule*> SCHEDULE;
-	unsigned int position;
+	unsigned int position,position1,position3,position4;
 	string date;
-	int uid=13, did=3;
+	int uid=0,did=0;
+	GetPatienfromFile(listofpatien);
 	Get_Schedule_from_file(SCHEDULE);
-	AddPatientoPriem(SCHEDULE,"16.12",did,uid);
+	GetDoctorfromFile(listofdoctor);
+	do {
+		cout << "Добро пожалвать\n";
+		cout << "Выберите необхадимое действие: \n";
+		cout << "1) Зайти как пациент;\n";
+		cout << "2) Зайти как администратор;\n";
+		cout << "0) Завершить сеанс.\n";
+		position = GetPosition();
+		switch (position)
+		{
+		case 1:
+			do {
+				cout << "Выберите необхадимое действие: \n";
+				cout << "1) Зарегистрировать нового пациента;\n";
+				cout << "2) Войти в свой аккаунт;\n";
+				cout << "0) Назад.\n";
+				position1 = GetPosition();
+				switch (position1)
+				{
+				case 1:
+					AddNewPatien(listofpatien);
+					break;
+				case 2:
+					if (EntertoPatienAccount(listofpatien,uid))
+					{
+						do {
+							cout << "Авторизация удачна.\n";
+							cout << "1) Записаться на приём;\n ";
+							cout << "2) Изменить сою учётную запись;\n";
+							cout << "0) Назад.\n";
+							cout << "Выберите необхадимое действие: \n";
+							position3 = GetPosition();
+							switch (position3)
+							{
+							case 1:
+								
+								cout << "Выберите врача для записи:\n";
+								ShowList(listofdoctor);
+								cout << "\nВведите id врача: "; cin >> did;
+								if (CheckListofDoctors(listofdoctor,did))
+								{
+									cout << "Даты приёма:\n";
+									ShowDate(SCHEDULE, did);
+									cout << "Выберите дату приёма: "; cin >> date;
+									AddPatientoPriem(SCHEDULE, date, did, uid);
+								}
+								break;
+							case 2:
+								do {
+									cout << "Доступные поля для изменения:\n";
+									cout << "1) Изменить имя;\n";
+									cout << "2) Изменить фамилию;\n";
+									cout << "3) Изменить отчество;\n";
+									cout << "4) Изменить дату рождения;\n ";
+									cout << "5) Изменить мобильный номер;\n";
+									cout << "6) Изменить Email;\n";
+									cout << "0) Назад.\n";
+									cout << "Выберите необхадимое действие: \n";
+									position4 = GetPosition();
+									string temp;
+									switch (position4)
+									{
+									case 1: 
+										cout << "Введите новое имя: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId()==uid)
+											{
+												(*iter)->SetName(temp);
+												break;
+											}
+										}
+										break;
+									case 2:
+										cout << "Введите новую фамилию: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId() == uid)
+											{
+												(*iter)->SetSurname(temp);
+												break;
+											}
+										}
+										break;
+									case 3:
+										cout << "Введите новую отчество: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId() == uid)
+											{
+												(*iter)->SetOtchestvo(temp);
+												break;
+											}
+										}
+										break;
+									case 4:
+										cout << "Введите новую дату рождения: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId() == uid)
+											{
+												(*iter)->SetBDay(temp);
+												break;
+											}
+										}
+										break;
+									case 5:
+										cout << "Введите новый мобильный номер: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId() == uid)
+											{
+												(*iter)->SetMobileNumber(temp);
+												break;
+											}
+										}
+										break;
+									case 6:
+										cout << "Введите новый Email: ";
+										cin >> temp;
+										for (auto iter = listofpatien.begin(); iter != listofpatien.end(); iter++) {
+											if ((*iter)->GetId() == uid)
+											{
+												(*iter)->SetEmail(temp);
+												break;
+											}
+										}
+										break;
+									case 0: break;
+									default:
+										cout << "Выбранной операции не существует. Попробуйте ещё раз.\n\n"; break;
+									}
+								
+								} while (position4!=0);
+								break;
+							case 0:break;
+							default:
+								cout << "Выбранной операции не существует. Попробуйте ещё раз.\n\n"; break;
+							}
+						} while (position3!=0);
+					}
+					break;
+				case 0:break;
+				default:
+					cout << "Выбранной операции не существует. Попробуйте ещё раз.\n\n"; break;
+				}
+				break;
+			} while (position1!=0);
+		case 2:break;
+		case 0:break;
+		default:
+			cout << "Выбранной операции не существует. Попробуйте ещё раз.\n\n"; break; 
+		}
+	} while (position!=0); 
+
 	return 0;
 }
 /////////////////Пациент//////////////////
@@ -149,19 +304,27 @@ void AddNewPatien(list<CardofPatien*>& ListofPatien) {
 	if (ListofPatien.size() == 0) 
 	{
 		patien->SetId(1);
+		ListofPatien.push_back(patien);
 	}
 	else
 	{
+		for (auto iter = ListofPatien.begin(); iter != ListofPatien.end(); iter++) {
+			if ((*iter)->GetName() == patien->GetName() && (*iter)->GetSurname() == patien->GetSurname() && (*iter)->GetOtchestvo() == patien->GetOtchestvo()) 
+			{
+				cout << "Пользователь с такими данными уже существует.\n ";
+				return;
+			}
+		}
 		patien->SetId(ListofPatien.back()->GetId());
+		ListofPatien.push_back(patien);
 	}
-	ListofPatien.push_back(patien);
 }
 void AddPatientoPriem(list<Schedule*>&schedule,string date,int did,int uid) 
 {
 	string time;
 	for (auto iter = schedule.begin(); iter != schedule.end(); iter++) 
 	{
-		if (((*iter)->GetDate()==date)&&((*iter)->GetDId()==did)) 
+		if ((*iter)->GetDate()==date&&(*iter)->GetDId()==did) 
 		{
 			cout<<"Свободное время приёма:\n";
 			for (int i = 0; i < 30; i++)
@@ -245,6 +408,15 @@ void ShowList(list<Schedule*>& SCHEDULE) {
 		cout << endl;
 	}
 
+}
+void ShowDate(list<Schedule*>& SCHEDULE,int did) {
+	for (auto iter = SCHEDULE.begin(); iter != SCHEDULE.end(); iter++) {
+		if ((*iter)->GetDId()==did)
+		{
+			cout << (*iter)->GetDate() << endl;
+		}
+	}
+	cout << endl;
 }
 /////////////////Доктор//////////////////
 void AddNewDoctor(list<Doctor*> & ListofDoctors) {
@@ -334,9 +506,34 @@ void GetDoctorfromFile(list<Doctor*>& ListofDoctors) {
 void ShowList(list<Doctor*>& ListofDoctors) {
 
 	for (auto iter = ListofDoctors.begin(); iter != ListofDoctors.end(); iter++) {
-		cout << (*iter)->Getid() << "\n" << (*iter)->GetDName() << " ";
-		cout << (*iter)->GetDSurname() << " " << (*iter)->GetDOtchestvo() << "\n";
+		cout << (*iter)->Getid() << "\n" << (*iter)->GetDSurname() << " ";
+		cout << (*iter)->GetDName() << " " << (*iter)->GetDOtchestvo() << "\n";
 		cout << (*iter)->GetSpeciality() << " " << (*iter)->GetCab() << "\n";
 		cout << endl;
 	}
+}
+/////////////////Доступ//////////////////
+bool EntertoPatienAccount(list<CardofPatien*>& ListofPatien,int &uid) {
+	string name, surname, otchestvo;
+	cout << "Введите имя пациента: "; cin >> name;
+	cout << "Введите фамилию пациента: "; cin >> surname;
+	cout << " Введите отчество пациента: "; cin >> otchestvo;
+	for (auto iter = ListofPatien.begin(); iter != ListofPatien.end(); iter++) {
+	
+		if ((*iter)->GetName()==name&&(*iter)->GetSurname()==surname&&(*iter)->GetOtchestvo()==otchestvo)
+		{
+			uid = (*iter)->GetId();
+			return true;
+		}
+	}
+	return false;
+}
+bool CheckListofDoctors(list<Doctor*>&ListofDoctors,int did) {
+	for (auto iter = ListofDoctors.begin(); iter != ListofDoctors.end(); iter++) {
+		if ((*iter)->Getid()==did)
+		{
+			return true;
+		}
+	}
+	return false;
 }
