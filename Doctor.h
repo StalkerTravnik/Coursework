@@ -22,14 +22,14 @@ public:
 	///////////Конструкторы класса////////////////
 	Doctor();
 	/////////////////Гетеры//////////////////
-	int Getid();
+	int GetId();
 	string GetDName();
 	string GetDSurname(); 
 	string GetDOtchestvo();
 	string GetSpeciality();
 	int GetCab(); 
 	///////////////Сетеры///////////////////
-	void Setid(int id);
+	void SetId(int id);
 	void SetName(string ); 
 	void SetSurname(string);
 	void SetOtchestvo(string); 

@@ -23,4 +23,3 @@ public:
 	std::string GetDate();
 	std::pair<std::string, int> GetPriem(int i);
 };
-

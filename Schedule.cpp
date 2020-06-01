@@ -15,4 +15,3 @@ int Schedule::GetId() { return id; };
 int Schedule::GetDId() { return Did; };
 std::string Schedule::GetDate() { return Date; };
 std::pair<std::string, int> Schedule::GetPriem(int i) { return priem[i]; };
-
